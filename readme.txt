@@ -9,3 +9,10 @@ Line 3 : x1 x2 x3 .... xn y2
 .
 .
 Line m : x1 x2 x3 .... xn ym         //Training sample m
+
+test sample -- enter test attributes :
+x1
+x2
+.
+.
+xn
