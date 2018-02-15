@@ -104,15 +104,19 @@ def Back_Prop(alpha,hidden_no,error_threshold,omega):   #implements back propaga
 			for j in range(len(w2)):
 				for k in range(len(h)): #update weights of layer 1
 					w2[j][k] = w2[j][k] + (alpha*local_g2[j]*h[k])
-	print("enter test sample\n")
-	x=[1.0]
-	m=[1.0]
-	n=[]
-	for j in range(len(training_x[0])-1):
-		x.extend([float(input("\nenter attribute : "))])
-	m.extend(exp_value(x,w1))    #calculate expected value and then feeds activation function and returns list with expected values of layer 1
-	n.extend(exp_value(m,w2))
-	print("\nOutput array 'Y' :",n)
+	while(1):
+		print("enter test sample\n")
+		x=[1.0]
+		m=[1.0]
+		n=[]
+		for j in range(len(training_x[0])-1):
+			x.extend([float(input("\nenter attribute : "))])
+		m.extend(exp_value(x,w1))    #calculate expected value and then feeds activation function and returns list with expected values of layer 1
+		n.extend(exp_value(m,w2))
+		max_value = max(n)
+		max_index = n.index(max_value)
+		
+		print("\nOutput class 'Y' :",max_index)
 	
 def main():
 	alpha  = float(input("Enter learning rate : "))   #(0.0001  is good)
