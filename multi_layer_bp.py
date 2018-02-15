@@ -56,11 +56,13 @@ def Back_Prop(alpha,hidden_no,error_threshold,omega):   #implements back propaga
 	out_no = len(training_y[0])
 	initialize_Weights(w1,w2,no_attr,hidden_no,omega,out_no)
 	Eprev = 0
-	E=100
+	E=100000
 	
 	while ( abs(E-Eprev) > error_threshold):
+		print("training : ",abs(E-Eprev))
 		Eprev = E
 		E = 0       # error value
+		
 		for i in range(len(training_x)):   #each training sample
 			h = [1.0]           #output value list of layer1 add h0
 			d = []     #output value list of layer2
@@ -71,7 +73,7 @@ def Back_Prop(alpha,hidden_no,error_threshold,omega):   #implements back propaga
 	
 			h.extend(exp_value(training_x[i],w1))    #calculate expected value and then feeds activation function and returns list with expected values of layer 1
 			d.extend(exp_value(h,w2))
-		
+			
 			#h2 contains final outputs
 		
 			#Backward Pass:
@@ -83,27 +85,38 @@ def Back_Prop(alpha,hidden_no,error_threshold,omega):   #implements back propaga
 			local_g2 =[]
 			j = 0
 			temp = 0
+			
 			for er in e:
 				temp += (er*er)
 				local_g2.extend([er*d[j]*(1-d[j])])
 				j += 1
 			temp = temp/2
+			
 			E += temp
 			for j in range(len(w1)) :
 				temp = 0 
 				for k in range(len(w2)):
-					temp += w2[k][j+1]
+					temp += (w2[k][j+1] * local_g2[k])
 				local_g1.extend([temp])
 			
 
 		
 			# Updation:
-			for j in range(len(w1)):   #update weights of layer 1
-				for k in range(len(training_x[i])):
-					w1[j][k] = w1[j][k] + (alpha*local_g1[j]*training_x[i][k])
 			for j in range(len(w2)):
 				for k in range(len(h)): #update weights of layer 1
 					w2[j][k] = w2[j][k] + (alpha*local_g2[j]*h[k])
+			for j in range(len(w1)):   #update weights of layer 1
+				for k in range(len(training_x[i])):
+					w1[j][k] = w1[j][k] + (alpha*local_g1[j]*training_x[i][k])
+			
+		
+	'''		
+		print("\nlocal_g1 : ",local_g1,"\nlocal_g2 : ",local_g2,)
+		if(Eprev != 100):
+			break
+		
+	'''
+
 	while(1):
 		print("enter test sample\n")
 		x=[1.0]
@@ -113,11 +126,11 @@ def Back_Prop(alpha,hidden_no,error_threshold,omega):   #implements back propaga
 			x.extend([float(input("\nenter attribute : "))])
 		m.extend(exp_value(x,w1))    #calculate expected value and then feeds activation function and returns list with expected values of layer 1
 		n.extend(exp_value(m,w2))
-		max_value = max(n)
-		max_index = n.index(max_value)
+#		max_value = max(n)
+#		max_index = n.index(max_value)
+		print("\n n : ",n)
 		
-		print("\nOutput class 'Y' :",max_index)
-	
+
 def main():
 	alpha  = float(input("Enter learning rate : "))   #(0.0001  is good)
 	if (alpha <= 1 and alpha > 0):
